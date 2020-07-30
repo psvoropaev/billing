@@ -6,7 +6,6 @@ Create Date: 2020-07-30 22:30:52.930152
 
 """
 from alembic import op
-import sqlalchemy as sa
 
 from web.app.config import config
 from web.models import metadata
