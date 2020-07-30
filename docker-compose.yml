@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  billing_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ENVIRONMENT=dev
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: billing_db
+      POSTGRES_PASSWORD: 1q2w3e4rQW!
+      POSTGRES_USER: billing_user
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata: {}

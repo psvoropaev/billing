@@ -1,0 +1,13 @@
+[dev-packages]
+pytest="*"
+
+[packages]
+fastapi = "*"
+python-logstash-async="*"
+pyyaml="*"
+uvicorn = "*"
+asyncpgsa = "*"
+psycopg2-binary = "*"
+
+[requires]
+python_version = "3.8"
