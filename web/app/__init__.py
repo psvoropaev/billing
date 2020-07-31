@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from fastapi.responses import PlainTextResponse
 
+from web import errors
 from web.app.config import config
 from web.app.logger import create_logger
 from web.api.v1 import v1_router
@@ -18,9 +20,14 @@ app = create_app()
 
 @app.on_event("startup")
 async def startup():
-    db_pool_shared.init_db
+    await db_pool_shared.init_db(app)
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    db_pool_shared.close_db
+    await db_pool_shared.close_db(app)
+
+
+@app.exception_handler(errors.DuplicateUser)
+async def http_exception_handler(request, exc):
+    return PlainTextResponse(str(exc), status_code=400)

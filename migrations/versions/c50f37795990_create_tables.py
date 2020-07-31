@@ -44,7 +44,7 @@ def upgrade():
     )
     op.create_table('wallet',
     sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
-    sa.Column('bill_number', sa.String(length=32), nullable=False),
+    sa.Column('bill_number', sa.String(length=64), nullable=False),
     sa.Column('user_id', sa.BigInteger(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['public.user.id'], ),
     sa.PrimaryKeyConstraint('id'),

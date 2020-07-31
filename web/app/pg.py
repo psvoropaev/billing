@@ -1,11 +1,12 @@
 import functools
-from functools import wraps
+import logging
 
 from asyncpg.pool import Pool
 from asyncpgsa.pool import create_pool
 
 from web.app.config import config
 
+loger = logging.getLogger(config.APP_NAME)
 
 class DBPool:
     db_pool = None
@@ -39,16 +40,18 @@ def dbpool(f):
     return wrapper
 
 
-def transaction(func):
-    @wraps
+def transaction(f):
     @dbpool
     async def wrapper(*args, db_pool, **kwargs):
         async with db_pool.acquire() as conn:
             tran = conn.transaction()
             try:
                 await tran.start()
-                return await func(*args, connection=conn, **kwargs)
-            finally:
+                result = await f(*args, connection=conn, **kwargs)
+                await tran.commit()
+                return result
+            except Exception as e:
                 await tran.rollback()
-
+                loger.exception(e)
+                raise e
     return wrapper

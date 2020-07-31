@@ -1,5 +1,5 @@
 import sqlalchemy as sa
-from sqlalchemy.sql import select, func
+from sqlalchemy.sql import func
 
 from web.app.config import config
 
@@ -17,7 +17,7 @@ wallet = sa.Table(
     'wallet',
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
-    sa.Column('bill_number', sa.String(32), nullable=False, index=True, unique=True),
+    sa.Column('bill_number', sa.String(64), nullable=False, index=True, unique=True),
     sa.Column('user_id', sa.ForeignKey('user.id'), index=True, nullable=False)
 )
 
