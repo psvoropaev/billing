@@ -9,14 +9,15 @@ user = sa.Table(
     'user',
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
-    sa.Column('name', sa.String(255), nullable=False)
+    sa.Column('name', sa.String(255), nullable=False),
+    sa.Column('pasport_data', sa.String(255), nullable=False, unique=True)
 )
 
 wallet = sa.Table(
     'wallet',
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
-    sa.Column('code', sa.String(32), nullable=False, index=True, unique=True),
+    sa.Column('bill_number', sa.String(32), nullable=False, index=True, unique=True),
     sa.Column('user_id', sa.ForeignKey('user.id'), index=True, nullable=False)
 )
 

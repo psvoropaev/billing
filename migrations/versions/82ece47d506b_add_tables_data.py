@@ -12,7 +12,7 @@ from web.models import metadata
 
 # revision identifiers, used by Alembic.
 revision = '82ece47d506b'
-down_revision = '871ffc85aff2'
+down_revision = 'c50f37795990'
 branch_labels = None
 depends_on = None
 

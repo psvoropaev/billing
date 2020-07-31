@@ -1,4 +1,5 @@
 import functools
+from functools import wraps
 
 from asyncpg.pool import Pool
 from asyncpgsa.pool import create_pool
@@ -34,5 +35,20 @@ def dbpool(f):
             return await f(*args, db_pool=pool, **kwargs)
         else:
             return await f(*args, **kwargs)
+
+    return wrapper
+
+
+def transaction(func):
+    @wraps
+    @dbpool
+    async def wrapper(*args, db_pool, **kwargs):
+        async with db_pool.acquire() as conn:
+            tran = conn.transaction()
+            try:
+                await tran.start()
+                return await func(*args, connection=conn, **kwargs)
+            finally:
+                await tran.rollback()
 
     return wrapper
