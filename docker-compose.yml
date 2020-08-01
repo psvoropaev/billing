@@ -19,13 +19,14 @@ services:
     environment:
       - ENVIRONMENT=dev
       - WORKER_MODE=YES
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
-#    volumes:
-#      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
-#      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
-#      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    volumes:
+      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
     ports:
       - "5672:5672"
       - "15672:15672"
