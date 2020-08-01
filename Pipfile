@@ -10,6 +10,8 @@ asyncpgsa = "*"
 psycopg2-binary = "*"
 celery="*"
 flower="*"
+celery-pool-asyncio="*"
+celery-decorator-taskcls="*"
 
 [requires]
 python_version = "3.8"

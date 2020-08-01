@@ -1,1 +1,1 @@
-from billing.app.celery import app
+from billing.app.celery import celery_app

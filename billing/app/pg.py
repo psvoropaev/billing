@@ -6,18 +6,19 @@ from asyncpgsa.pool import create_pool
 
 from billing.app.config import config
 
-loger = logging.getLogger(config.APP_NAME)
+logger = logging.getLogger(config.APP_NAME)
+
 
 class DBPool:
     db_pool = None
 
     @classmethod
-    async def init_db(cls, app):
+    async def init_db(cls):
         pool = await create_pool(dsn=config.DB_PG_URL, min_size=3)
         cls.db_pool = pool
 
     @classmethod
-    async def close_db(cls, app):
+    async def close_db(cls):
         await cls.db_pool.close()
 
     @classmethod
@@ -52,6 +53,7 @@ def transaction(f):
                 return result
             except Exception as e:
                 await tran.rollback()
-                loger.exception(e)
+                logger.exception(e)
                 raise e
+
     return wrapper

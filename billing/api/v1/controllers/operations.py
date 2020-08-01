@@ -1,5 +1,4 @@
 from sqlalchemy import select, update
-from sqlalchemy.sql import func
 
 from billing import models
 from billing.errors import OperationAlreadyExists, NotEnoughFunds
@@ -70,7 +69,7 @@ async def payment(connection, correlation_id: str, amount: float, reason_code: s
 
 
 @transaction
-async def payment_task(connection, correlation_id: str, amount: float, reason_code: str, bill_number: str,
+async def payment_procces(connection, correlation_id: str, amount: float, reason_code: str, bill_number: str,
                        bill_number_sender: str = None):
     if await check_possibility_payment(correlation_id, connection):
         if bill_number_sender:

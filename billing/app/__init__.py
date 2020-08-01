@@ -20,12 +20,12 @@ app = create_app()
 
 @app.on_event("startup")
 async def startup():
-    await db_pool_shared.init_db(app)
+    await db_pool_shared.init_db()
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    await db_pool_shared.close_db(app)
+    await db_pool_shared.close_db()
 
 
 @app.exception_handler(errors.BaseException)
