@@ -2,7 +2,7 @@ APP_NAME: BILLING
 LOG_LEVEL: DEBUG
 
 CELERY_BROKER_URL:
-  - amqp://user:password@127.0.0.1:5672/billing
+  - amqp://user:password@0.0.0.0:5672/billing
 
 REDIS_HOST: redis
 REDIS_PORT: 6379

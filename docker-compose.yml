@@ -1,32 +1,13 @@
-version: '3'
+version: "3.0"
 
 services:
-  billing_api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    environment:
-      - ENVIRONMENT=dev
-
-  billing_worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5555:5555"
-    environment:
-      - ENVIRONMENT=dev
-      - WORKER_MODE=YES
-
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
-    volumes:
-      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
-      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
-      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+#    volumes:
+#      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+#      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+#      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -47,3 +28,34 @@ services:
       POSTGRES_USER: billing_user
     volumes:
       - ./.docker/pgdata:/var/lib/postgresql/data
+
+
+  billing_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ENVIRONMENT=dev
+      - PYTHONPATH=.
+    depends_on:
+      - rabbitmq
+      - postgres
+    container_name: billing_api
+
+
+  billing_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5555:5555"
+    environment:
+      - ENVIRONMENT=dev
+      - WORKER_MODE=YES
+      - PYTHONPATH=.
+    depends_on:
+      - rabbitmq
+      - postgres
+    container_name: billing_worker

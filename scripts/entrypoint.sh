@@ -1,5 +1,11 @@
 #!/bin/bash
 
+while ! nc -zvw3 rabbitmq 5672; do echo waiting for RabbitMQ; sleep 3; done;
+echo "RabbitMQ is up - executing command"
+
+while ! nc -zvw3 postgres 5432; do echo waiting for Postgres; sleep 3; done;
+echo "Postgres is up - executing command"
+
 exec alembic upgrade head
 if [[ ${WORKER_MODE:-NO} = 'YES' ]]; then
     exec celery -A worker:celery_app flower --port=5555 &

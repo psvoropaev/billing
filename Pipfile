@@ -12,6 +12,7 @@ celery="*"
 flower="*"
 celery-pool-asyncio="*"
 celery-decorator-taskcls="*"
+alembic="*"
 
 [requires]
 python_version = "3.8"
