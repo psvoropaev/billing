@@ -1,11 +1,9 @@
-from uuid import uuid4
-
 from sqlalchemy import select
 
-from web import models, errors
-from web.app.pg import dbpool, transaction
-from web.api.v1.serializers import UserWallet
-
+from billing import models, errors
+from billing.api.v1.controllers.wallet import add_wallet
+from billing.app.pg import dbpool, transaction
+from billing.api.v1.serializers import UserWalletSchema
 
 
 @dbpool
@@ -18,22 +16,18 @@ async def get_users(db_pool):
 
     async with db_pool.acquire() as conn:
         users = await conn.fetch(users_query)
-        return [UserWallet(**dict(user)) for user in users]
+        return [UserWalletSchema(**dict(user)) for user in users]
 
 
 def add_user(name: str, pasport_data: str):
     return models.user.insert().values({'name': name, 'pasport_data': pasport_data})
 
 
-def add_wallet(user_id: int):
-    return models.wallet.insert().values({'bill_number': str(uuid4()), 'user_id': user_id})
-
-
-async def check_user_exist(pasport_data, connection):
+async def check_user_exist(pasport_data, connection) -> bool:
     user_query = (
         select([models.user.c.id]).
-            select_from(models.user).
-            where(models.user.c.pasport_data == pasport_data)
+        select_from(models.user).
+        where(models.user.c.pasport_data == pasport_data)
     )
     row = await connection.fetchrow(user_query)
     return bool(row)

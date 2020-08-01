@@ -13,6 +13,8 @@ class BaseConfig:
     APP_NAME: str
     LOG_LEVEL: str
 
+    CELERY_BROKER_URL: list
+
     DB_PG_NAME: str
     DB_SCHEMA: str
     DB_PG_USERNAME: str

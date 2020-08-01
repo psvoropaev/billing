@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse
 
-from web import errors
-from web.app.config import config
-from web.app.logger import create_logger
-from web.api.v1 import v1_router
-from web.app.pg import db_pool_shared
+from billing import errors
+from billing.app.config import config
+from billing.app.logger import create_logger
+from billing.api.v1 import v1_router
+from billing.app.pg import db_pool_shared
 
 
 def create_app():

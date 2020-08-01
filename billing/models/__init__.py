@@ -1,7 +1,7 @@
 import sqlalchemy as sa
-from sqlalchemy.sql import func
+from sqlalchemy.sql import func, expression
 
-from web.app.config import config
+from billing.app.config import config
 
 metadata = sa.MetaData(schema=config.DB_SCHEMA)
 
@@ -26,7 +26,8 @@ reason = sa.Table(
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
     sa.Column('code', sa.String(255), nullable=False, index=True, unique=True),
-    sa.Column('name', sa.String(255), nullable=False)
+    sa.Column('name', sa.String(255), nullable=False),
+    sa.Column('using_second_bill_number', sa.Boolean, nullable=False, server_default=expression.false()),
 )
 
 currency = sa.Table(
@@ -41,7 +42,7 @@ operation = sa.Table(
     'operation',
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
-    sa.Column('correlation_id', sa.String(36), nullable=False, index=True, unique=True),
+    sa.Column('correlation_id', sa.String(36), nullable=False, index=True),
     sa.Column('reason_id', sa.ForeignKey('reason.id'), index=True, nullable=False),
     sa.Column('wallet_id', sa.ForeignKey('wallet.id'), index=True, nullable=False),
     sa.Column('connected_wallet_id', sa.ForeignKey('wallet.id'), index=True, nullable=True),

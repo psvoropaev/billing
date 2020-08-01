@@ -10,6 +10,32 @@ services:
     environment:
       - ENVIRONMENT=dev
 
+  billing_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5555:5555"
+    environment:
+      - ENVIRONMENT=dev
+      - WORKER_MODE=YES
+
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    volumes:
+      - ./.docker/rabbitmq/etc/:/etc/rabbitmq/
+      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
+      - ./.docker/rabbitmq/logs/:/var/log/rabbitmq/
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - "RABBITMQ_DEFAULT_PASS=password"
+      - "RABBITMQ_DEFAULT_USER=user"
+      - "RABBITMQ_DEFAULT_VHOST='billing'"
+
   postgres:
     image: postgres
     container_name: postgres
@@ -21,6 +47,4 @@ services:
       POSTGRES_PASSWORD: 1q2w3e4rQW!
       POSTGRES_USER: billing_user
     volumes:
-      - pgdata:/var/lib/postgresql/data
-volumes:
-  pgdata: {}
+      - ./.docker/pgdata:/var/lib/postgresql/data

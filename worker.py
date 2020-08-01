@@ -1,0 +1,1 @@
+from billing.app.celery import app

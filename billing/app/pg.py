@@ -4,7 +4,7 @@ import logging
 from asyncpg.pool import Pool
 from asyncpgsa.pool import create_pool
 
-from web.app.config import config
+from billing.app.config import config
 
 loger = logging.getLogger(config.APP_NAME)
 

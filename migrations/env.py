@@ -6,8 +6,8 @@ from sqlalchemy import create_engine
 
 from alembic import context
 
-from web.app.config import config as app_config
-from web.models import metadata
+from billing.app.config import config as app_config
+from billing.models import metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
