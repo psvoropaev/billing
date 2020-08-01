@@ -18,7 +18,8 @@ wallet = sa.Table(
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
     sa.Column('bill_number', sa.String(36), nullable=False, index=True, unique=True),
-    sa.Column('user_id', sa.ForeignKey('user.id'), index=True, nullable=False)
+    sa.Column('user_id', sa.ForeignKey('user.id'), index=True, nullable=False),
+    sa.Column('balance', sa.Float, nullable=False, default=0)
 )
 
 reason = sa.Table(

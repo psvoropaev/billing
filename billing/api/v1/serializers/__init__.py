@@ -8,6 +8,7 @@ class UserSchema(BaseModel):
 
 class UserWalletSchema(UserSchema):
     bill_number: str
+    balance: float
 
 
 class PaymentBaseSchema(BaseModel):

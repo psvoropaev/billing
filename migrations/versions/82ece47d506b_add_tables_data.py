@@ -41,5 +41,6 @@ def upgrade():
 
 
 def downgrade():
+    op.execute(f'DELETE FROM {config.DB_SCHEMA}.operation')
     op.execute(f'DELETE FROM {config.DB_SCHEMA}.currency')
     op.execute(f'DELETE FROM {config.DB_SCHEMA}.reason')

@@ -3,6 +3,11 @@ LOG_LEVEL: DEBUG
 
 CELERY_BROKER_URL:
   - amqp://user:password@rabbitmq/billing
+
+REDIS_HOST: redis
+REDIS_PORT: 6379
+REDIS_DB: 0
+
 DB_PG_HOST: 0.0.0.0
 DB_PG_PORT: 5432
 DB_PG_USERNAME: billing_user

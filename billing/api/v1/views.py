@@ -6,7 +6,7 @@ from fastapi.responses import PlainTextResponse
 
 from billing.app import config
 from billing.api.v1.controllers.users import get_users, create_user
-from billing.api.v1.controllers.tasks import payment_task
+from billing.api.v1.controllers.operations import payment_task
 from billing.api.v1.serializers import UserSchema, UserWalletSchema, PaymentBaseSchema, TransferSchema
 
 v1_router = APIRouter()

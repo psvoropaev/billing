@@ -1,14 +1,15 @@
-import asyncio
-
-from sqlalchemy import select
+from sqlalchemy import select, update
+from sqlalchemy.sql import func
 
 from billing import models
+from billing.errors import OperationAlreadyExists, NotEnoughFunds
 from billing.api.v1.controllers.reason import get_reason_data
-from billing.api.v1.controllers.wallet import get_wallet_id
+from billing.api.v1.controllers.wallet import get_wallet_field
+from billing.app.pg import transaction
 
 
 def add_wallet_operation(correlation_id: str, amount: float, reason_id: int, wallet_id_recipient: int,
-                         wallet_id_sender: int=None):
+                         wallet_id_sender: int = None):
     return models.operation.insert().values({
         'correlation_id': correlation_id,
         'amount': amount,
@@ -16,6 +17,13 @@ def add_wallet_operation(correlation_id: str, amount: float, reason_id: int, wal
         'wallet_id': wallet_id_recipient,
         'connected_wallet_id': wallet_id_sender
     })
+
+
+async def refresh_wallet_balance(wallet_id: int, amount: float, connection) -> float:
+    query_update = update(models.wallet).where(
+        models.wallet.c.id == wallet_id
+    ).values({'balance': models.wallet.c.balance + amount})
+    await connection.fetch(query_update)
 
 
 async def check_possibility_payment(correlation_id: str, connection) -> bool:
@@ -29,10 +37,10 @@ async def check_possibility_payment(correlation_id: str, connection) -> bool:
 
 
 async def payment(connection, correlation_id: str, amount: float, reason_code: str, bill_num_recipient: str,
-            bill_num_sender: str=None):
+                  bill_num_sender: str = None):
     reason_id, using_second_bill_number = await get_reason_data(reason_code, connection)
-    wallet_id_recipient = await get_wallet_id(bill_num_recipient, connection)
-    wallet_id_sender = await get_wallet_id(bill_num_sender, connection) if using_second_bill_number else None
+    wallet_id_recipient = await get_wallet_field(bill_num_recipient, 'id', connection)
+    wallet_id_sender = await get_wallet_field(bill_num_sender, 'id', connection) if using_second_bill_number else None
 
     tasks = []
     # зачислить средста на счет
@@ -45,6 +53,7 @@ async def payment(connection, correlation_id: str, amount: float, reason_code: s
             wallet_id_sender
         )
     )
+    await refresh_wallet_balance(wallet_id_recipient, amount, connection)
 
     # отметить так же списание средств со счета
     if using_second_bill_number:
@@ -56,4 +65,21 @@ async def payment(connection, correlation_id: str, amount: float, reason_code: s
                 wallet_id_sender,
                 wallet_id_recipient
             )
+        )
+        await refresh_wallet_balance(wallet_id_sender, -amount, connection)
+
+
+@transaction
+async def payment_task(connection, correlation_id: str, amount: float, reason_code: str, bill_number: str,
+                       bill_number_sender: str = None):
+    if await check_possibility_payment(correlation_id, connection):
+        if bill_number_sender:
+            balance = await get_wallet_field(bill_number_sender, 'balance', connection)
+            if balance < amount:
+                raise NotEnoughFunds(f'Not enough funds. Balance={balance}')
+        await payment(connection, correlation_id, amount, reason_code, bill_number, bill_number_sender)
+
+    else:
+        raise OperationAlreadyExists(
+            f'Payment operation already exists with correlation_id="{correlation_id}"'
         )

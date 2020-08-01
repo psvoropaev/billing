@@ -47,6 +47,7 @@ def upgrade():
     sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
     sa.Column('bill_number', sa.String(length=36), nullable=False),
     sa.Column('user_id', sa.BigInteger(), nullable=False),
+    sa.Column('balance', sa.Float(), nullable=False, default=0),
     sa.ForeignKeyConstraint(['user_id'], ['public.user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     schema='public'

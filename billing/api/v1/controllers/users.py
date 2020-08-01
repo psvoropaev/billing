@@ -11,7 +11,8 @@ async def get_users(db_pool):
     users_query = select([
         models.user.c.name,
         models.user.c.pasport_data,
-        models.wallet.c.bill_number
+        models.wallet.c.bill_number,
+        models.wallet.c.balance
     ]).select_from(models.wallet.join(models.user))
 
     async with db_pool.acquire() as conn:

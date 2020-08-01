@@ -15,6 +15,10 @@ class BaseConfig:
 
     CELERY_BROKER_URL: list
 
+    REDIS_HOST: str
+    REDIS_PORT: int
+    REDIS_DB: int
+
     DB_PG_NAME: str
     DB_SCHEMA: str
     DB_PG_USERNAME: str
