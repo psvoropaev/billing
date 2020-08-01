@@ -17,7 +17,7 @@ wallet = sa.Table(
     'wallet',
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
-    sa.Column('bill_number', sa.String(64), nullable=False, index=True, unique=True),
+    sa.Column('bill_number', sa.String(36), nullable=False, index=True, unique=True),
     sa.Column('user_id', sa.ForeignKey('user.id'), index=True, nullable=False)
 )
 
@@ -41,6 +41,7 @@ operation = sa.Table(
     'operation',
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
+    sa.Column('correlation_id', sa.String(36), nullable=False, index=True, unique=True),
     sa.Column('reason_id', sa.ForeignKey('reason.id'), index=True, nullable=False),
     sa.Column('wallet_id', sa.ForeignKey('wallet.id'), index=True, nullable=False),
     sa.Column('connected_wallet_id', sa.ForeignKey('wallet.id'), index=True, nullable=True),

@@ -44,7 +44,7 @@ def upgrade():
     )
     op.create_table('wallet',
     sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
-    sa.Column('bill_number', sa.String(length=64), nullable=False),
+    sa.Column('bill_number', sa.String(length=36), nullable=False),
     sa.Column('user_id', sa.BigInteger(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['public.user.id'], ),
     sa.PrimaryKeyConstraint('id'),
@@ -54,6 +54,7 @@ def upgrade():
     op.create_index(op.f('ix_public_wallet_user_id'), 'wallet', ['user_id'], unique=False, schema='public')
     op.create_table('operation',
     sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
+    sa.Column('correlation_id', sa.String(length=36), nullable=False),
     sa.Column('reason_id', sa.BigInteger(), nullable=False),
     sa.Column('wallet_id', sa.BigInteger(), nullable=False),
     sa.Column('connected_wallet_id', sa.BigInteger(), nullable=True),
@@ -69,6 +70,7 @@ def upgrade():
     op.create_index(op.f('ix_public_operation_opdate'), 'operation', ['opdate'], unique=False, schema='public')
     op.create_index(op.f('ix_public_operation_reason_id'), 'operation', ['reason_id'], unique=False, schema='public')
     op.create_index(op.f('ix_public_operation_wallet_id'), 'operation', ['wallet_id'], unique=False, schema='public')
+    op.create_index(op.f('ix_public_operation_correlation_id'), 'operation', ['correlation_id'], unique=True, schema='public')
 
 
 
