@@ -1,14 +1,18 @@
-class DuplicateUser(Exception):
-    pass
+class BaseException(Exception):
+    http_code = 500
 
 
-class NotFound(Exception):
-    pass
+class DuplicateUser(BaseException):
+    http_code = 400
 
 
-class OperationAlreadyExists(Exception):
-    pass
+class NotFound(BaseException):
+    http_code = 404
 
 
-class NotEnoughFunds(Exception):
-    pass
+class OperationAlreadyExists(BaseException):
+    http_code = 400
+
+
+class NotEnoughFunds(BaseException):
+    http_code = 400

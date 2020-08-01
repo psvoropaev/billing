@@ -15,7 +15,7 @@ def add_wallet(user_id: int):
 
 async def get_wallet_field(bill_number: str, field: str, connection) -> int:
     wallet_query = select([
-        models.wallet.c.id
+        models.wallet
     ]).select_from(models.wallet).where(models.wallet.c.bill_number == bill_number)
 
     wallet = await connection.fetchrow(wallet_query)

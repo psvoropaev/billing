@@ -28,6 +28,6 @@ async def shutdown():
     await db_pool_shared.close_db(app)
 
 
-@app.exception_handler(errors.DuplicateUser)
+@app.exception_handler(errors.BaseException)
 async def http_exception_handler(request, exc):
-    return PlainTextResponse(str(exc), status_code=400)
+    return PlainTextResponse(str(exc), status_code=exc.http_code)
