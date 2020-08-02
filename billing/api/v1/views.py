@@ -1,7 +1,7 @@
 from uuid import uuid4
 import logging
 from fastapi import APIRouter, Depends
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import JSONResponse
 from typing import List
 
 from billing.app.config import config
@@ -22,16 +22,16 @@ async def get_users_view():
 @v1_router.post("/users")
 async def add_users_view(user: UserSchema):
     await create_user(**dict(user))
-    return PlainTextResponse(status_code=201)
+    return JSONResponse(status_code=201)
 
 
 @v1_router.post("/wallets/transfer")
 async def transfer_money_view(payment: TransferSchema, correlation_id=Depends(uuid4)):
     await payment_task(correlation_id=str(correlation_id), reason_code="TRANSFER", **dict(payment))
-    return PlainTextResponse(str(correlation_id), status_code=200)
+    return JSONResponse(dict(operation_id=str(correlation_id)), status_code=200)
 
 
 @v1_router.post("/wallets/topUp")
 async def top_up_money_view(payment: PaymentBaseSchema, correlation_id=Depends(uuid4)):
     await payment_task(correlation_id=str(correlation_id), reason_code="TOPUP", **dict(payment))
-    return PlainTextResponse(str(correlation_id), status_code=200)
+    return JSONResponse(dict(operation_id=str(correlation_id)), status_code=200)

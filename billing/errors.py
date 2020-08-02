@@ -21,6 +21,3 @@ class BadParams(BaseException):
 class NotEnoughFunds(BaseException):
     pass
 
-
-class MaxRetryCount(BaseException):
-    http_code = 500
