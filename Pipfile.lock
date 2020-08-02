@@ -80,30 +80,6 @@
             ],
             "version": "==3.6.3.0"
         },
-        "celery": {
-            "hashes": [
-                "sha256:a92e1d56e650781fb747032a3997d16236d037c8199eacd5217d1a72893bca45",
-                "sha256:d220b13a8ed57c78149acf82c006785356071844afe0b27012a4991d44026f9f"
-            ],
-            "index": "pypi",
-            "version": "==4.4.7"
-        },
-        "celery-decorator-taskcls": {
-            "hashes": [
-                "sha256:1dd1ad58f03ff2575bf09365d2765215b77d2cd6ddaa91e920b19fdba08ba630",
-                "sha256:d7e3be4d1b57bad901b31ed55ed2f875d5e0ce01ed7c8b8c5c751e77486eb47e"
-            ],
-            "index": "pypi",
-            "version": "==0.1.4"
-        },
-        "celery-pool-asyncio": {
-            "hashes": [
-                "sha256:330e0ff31a7f6e3ea9cb004843f2f967601602b52cee05a2faea7ed65b76a5b8",
-                "sha256:72cdec065060bc99af57771cba7f0444d8a901842ee3c859d0d167c547764a21"
-            ],
-            "index": "pypi",
-            "version": "==0.2.0"
-        },
         "click": {
             "hashes": [
                 "sha256:d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a",

@@ -1,1 +1,0 @@
-from billing.app.celery import celery_app

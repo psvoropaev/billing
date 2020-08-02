@@ -9,6 +9,11 @@ from billing.api.v1.serializers import UserWalletSchema
 
 @transaction
 async def get_users(connection):
+    """
+    get all users and wallets
+    :param connection:
+    :return list users info:
+    """
     users_query = select([
         models.user.c.name,
         models.user.c.pasport_data,
@@ -21,10 +26,22 @@ async def get_users(connection):
 
 
 def add_user(name: str, pasport_data: str):
+    """
+    Add user to db
+    :param name: user name
+    :param pasport_data: unique passport data
+    :return:
+    """
     return models.user.insert().values({'name': name, 'pasport_data': pasport_data})
 
 
-async def check_user_exist(pasport_data, connection) -> bool:
+async def check_user_exist(pasport_data: str, connection) -> bool:
+    """
+    Check if there is such a user
+    :param pasport_data: unique passport data
+    :param connection:
+    :return: True if user exists
+    """
     user_query = (
         select([models.user.c.id]).
         select_from(models.user).
@@ -34,6 +51,7 @@ async def check_user_exist(pasport_data, connection) -> bool:
     return bool(row)
 
 
+@transaction
 async def create_user(name: str, pasport_data: str, currency_code: str, connection):
     if not await check_user_exist(pasport_data, connection):
         currency_id = await get_currency_id(currency_code, connection)

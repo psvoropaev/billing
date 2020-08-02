@@ -6,6 +6,12 @@ from billing import models, errors
 
 
 def add_wallet(user_id: int, currency_id: int):
+    """
+    add wallet to db
+    :param user_id: User
+    :param currency_id: Currency
+    :return:
+    """
     return models.wallet.insert().values({
         'bill_number': str(uuid4()),
         'user_id': user_id,
@@ -14,7 +20,14 @@ def add_wallet(user_id: int, currency_id: int):
     })
 
 
-async def get_wallet_field(bill_number: str, field: str, connection) -> int:
+async def get_wallet_field(bill_number: str, field: str, connection):
+    """
+    Get field value from wallet
+    :param bill_number:
+    :param field:
+    :param connection:
+    :return:
+    """
     if not (field and bill_number):
         raise errors.BadParams(f'Wrong params, bill_number="{bill_number}", field="{field}"')
 
@@ -30,6 +43,13 @@ async def get_wallet_field(bill_number: str, field: str, connection) -> int:
 
 
 async def refresh_wallet_balance(wallet_id: int, amount: float, connection) -> float:
+    """
+    Refresh wallet balance
+    :param wallet_id:
+    :param amount:
+    :param connection:
+    :return:
+    """
     query_update = update(models.wallet).where(
         models.wallet.c.id == wallet_id
     ).values({'balance': models.wallet.c.balance + amount})

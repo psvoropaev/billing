@@ -3,7 +3,13 @@ from sqlalchemy import select
 from billing import models, errors
 
 
-async def get_reason_data(code: str, connection):
+async def get_reason_data(code: str, connection) -> tuple:
+    """
+    Get Reason id and second account participation flag
+    :param code: unique reson code
+    :param connection:
+    :return reason_id, using_second_bill_number:
+    """
     reason_query = select([
         models.reason.c.id,
         models.reason.c.using_second_bill_number

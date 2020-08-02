@@ -5,7 +5,9 @@ from billing import errors
 from billing.app.config import config
 from billing.app.logger import create_logger
 from billing.api.v1 import v1_router
+from billing.api.v1.controllers.tasks import payment_task
 from billing.app.pg import db_pool_shared
+from billing.app.redis import run_errors_payments
 
 
 def create_app():
@@ -21,6 +23,7 @@ app = create_app()
 @app.on_event("startup")
 async def startup():
     await db_pool_shared.init_db()
+    await run_errors_payments(payment_task)
 
 
 @app.on_event("shutdown")

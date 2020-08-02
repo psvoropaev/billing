@@ -13,11 +13,8 @@ pyyaml="*"
 uvicorn = "*"
 asyncpgsa = "*"
 psycopg2-binary = "*"
-celery="*"
-flower="*"
-celery-pool-asyncio="*"
-celery-decorator-taskcls="*"
 alembic="*"
+asyncio_redis = "*"
 
 [requires]
 python_version = "3.8"

@@ -1,19 +1,6 @@
 version: "3.0"
 
 services:
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq
-    volumes:
-      - ./.docker/rabbitmq/data/:/var/lib/rabbitmq/
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      - "RABBITMQ_DEFAULT_PASS=password"
-      - "RABBITMQ_DEFAULT_USER=user"
-      - "RABBITMQ_DEFAULT_VHOST=billing"
-
   postgres:
     image: postgres
     container_name: postgres
@@ -25,8 +12,17 @@ services:
       POSTGRES_PASSWORD: 1q2w3e4rQW!
       POSTGRES_USER: billing_user
     volumes:
-      - ./.docker/pgdata:/var/lib/postgresql/data
+      - ./docker/pgdata:/var/lib/postgresql/data
 
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./docker/redis:/data
+    entrypoint: redis-server --appendonly yes
+    restart: always
 
   billing_api:
     build:
@@ -38,22 +34,7 @@ services:
       - ENVIRONMENT=dev
       - PYTHONPATH=.
     depends_on:
-      - rabbitmq
       - postgres
+      - redis
     container_name: billing_api
 
-
-  billing_worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "5555:5555"
-    environment:
-      - ENVIRONMENT=dev
-      - WORKER_MODE=YES
-      - PYTHONPATH=.
-    depends_on:
-      - rabbitmq
-      - postgres
-    container_name: billing_worker

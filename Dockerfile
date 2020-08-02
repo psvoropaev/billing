@@ -14,5 +14,5 @@ RUN mkdir -p logs \
  && chmod a+w logs \
  && chmod +x ./scripts/entrypoint.sh
 
-EXPOSE 5000 5555
+EXPOSE 5000
 ENTRYPOINT ["./scripts/entrypoint.sh"]

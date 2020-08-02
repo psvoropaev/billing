@@ -65,3 +65,4 @@ def db_conn(db_pool, event_loop):
         yield conn
     finally:
         event_loop.run_until_complete(db_pool.release(conn))
+

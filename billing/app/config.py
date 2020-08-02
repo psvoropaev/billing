@@ -13,10 +13,13 @@ class BaseConfig:
     APP_NAME: str
     LOG_LEVEL: str
 
-    CELERY_BROKER_URL: list
+    REDIS_HOST: str
+    REDIS_PORT: int
+    REDIS_DB: int
 
     DELAY_ATTEMPTS: int
-    COUNT_ATTEMPTS: int
+
+    QUEUE_RETRY: str
 
     DB_PG_NAME: str
     DB_SCHEMA: str
