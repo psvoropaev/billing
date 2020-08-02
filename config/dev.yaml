@@ -5,13 +5,13 @@ DELAY_ATTEMPTS: [1, 10, 60, 180, 1000 6400, 86400]
 
 QUEUE_RETRY: queue_retry
 
-#REDIS_HOST: redis
-REDIS_HOST: 0.0.0.0
+#REDIS_HOST: 0.0.0.0
+REDIS_HOST: redis
 REDIS_PORT: 6379
 REDIS_DB: 0
 
-#DB_PG_HOST: postgres
-DB_PG_HOST: 0.0.0.0
+#DB_PG_HOST: 0.0.0.0
+DB_PG_HOST: postgres
 DB_PG_PORT: 5432
 DB_PG_USERNAME: billing_user
 DB_PG_NAME: billing_db
