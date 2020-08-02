@@ -47,11 +47,14 @@ def upgrade():
     sa.Column('id', sa.BigInteger(), autoincrement=True, nullable=False),
     sa.Column('bill_number', sa.String(length=36), nullable=False),
     sa.Column('user_id', sa.BigInteger(), nullable=False),
+    sa.Column('currency_id', sa.BigInteger(), nullable=False),
     sa.Column('balance', sa.Float(), nullable=False, default=0),
     sa.ForeignKeyConstraint(['user_id'], ['public.user.id'], ),
+    sa.ForeignKeyConstraint(['currency_id'], ['public.currency.id'], ),
     sa.PrimaryKeyConstraint('id'),
     schema='public'
     )
+    op.create_index(op.f('ix_public_wallet_currency_id'), 'wallet', ['currency_id'], unique=False, schema='public')
     op.create_index(op.f('ix_public_wallet_bill_number'), 'wallet', ['bill_number'], unique=True, schema='public')
     op.create_index(op.f('ix_public_wallet_user_id'), 'wallet', ['user_id'], unique=False, schema='public')
     op.create_table('operation',
@@ -84,6 +87,7 @@ def downgrade():
     op.drop_index(op.f('ix_public_operation_correlation_id'), table_name='operation', schema='public')
     op.drop_index(op.f('ix_public_operation_connected_wallet_id'), table_name='operation', schema='public')
     op.drop_table('operation', schema='public')
+    # op.drop_index(op.f('ix_public_wallet_currency_id'), table_name='wallet', schema='public')
     op.drop_index(op.f('ix_public_wallet_user_id'), table_name='wallet', schema='public')
     op.drop_index(op.f('ix_public_wallet_bill_number'), table_name='wallet', schema='public')
     op.drop_table('wallet', schema='public')

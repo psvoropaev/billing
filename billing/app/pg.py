@@ -1,7 +1,7 @@
 import functools
 import logging
 
-from asyncpg.pool import Pool
+from asyncpg.pool import Pool, PoolConnectionProxy
 from asyncpgsa.pool import create_pool
 
 from billing.app.config import config
@@ -44,16 +44,18 @@ def dbpool(f):
 def transaction(f):
     @dbpool
     async def wrapper(*args, db_pool, **kwargs):
-        async with db_pool.acquire() as conn:
-            tran = conn.transaction()
-            try:
-                await tran.start()
-                result = await f(*args, **dict(connection=conn, **kwargs))
-                await tran.commit()
-                return result
-            except Exception as e:
-                await tran.rollback()
-                logger.exception(e)
-                raise e
-
+        if 'connection' not in kwargs and all(not isinstance(arg, PoolConnectionProxy) for arg in args):
+            async with db_pool.acquire() as conn:
+                tran = conn.transaction()
+                try:
+                    await tran.start()
+                    result = await f(*args, connection=conn, **kwargs)
+                    await tran.commit()
+                    return result
+                except Exception as e:
+                    await tran.rollback()
+                    logger.exception(e)
+                    raise e
+        else:
+            return await f(*args, **kwargs)
     return wrapper

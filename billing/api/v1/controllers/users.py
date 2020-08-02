@@ -1,8 +1,9 @@
 from sqlalchemy import select
 
 from billing import models, errors
-from billing.api.v1.controllers.wallet import add_wallet
-from billing.app.pg import dbpool, transaction
+from billing.api.v1.controllers.wallets import add_wallet
+from billing.api.v1.controllers.currency import get_currency_id
+from billing.app.pg import transaction
 from billing.api.v1.serializers import UserWalletSchema
 
 
@@ -33,11 +34,12 @@ async def check_user_exist(pasport_data, connection) -> bool:
     return bool(row)
 
 
-async def create_user(name: str, pasport_data: str, connection):
+async def create_user(name: str, pasport_data: str, currency_code: str, connection):
     if not await check_user_exist(pasport_data, connection):
+        currency_id = await get_currency_id(currency_code, connection)
         user = await connection.fetchrow(add_user(name, pasport_data))
         user_id = user['id']
-        await connection.fetchrow(add_wallet(user_id))
+        await connection.fetchrow(add_wallet(user_id, currency_id))
         return user_id
     else:
         raise errors.DuplicateUser(

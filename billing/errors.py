@@ -14,6 +14,10 @@ class OperationAlreadyExists(BaseException):
     pass
 
 
+class BadParams(BaseException):
+    http_code = 500
+
+
 class NotEnoughFunds(BaseException):
     pass
 

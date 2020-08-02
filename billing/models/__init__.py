@@ -13,13 +13,22 @@ user = sa.Table(
     sa.Column('pasport_data', sa.String(255), nullable=False, unique=True)
 )
 
+currency = sa.Table(
+    'currency',
+    metadata,
+    sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
+    sa.Column('alias', sa.String(255), nullable=False, index=True, unique=True),
+    sa.Column('name', sa.String(255), nullable=False)
+)
+
 wallet = sa.Table(
     'wallet',
     metadata,
     sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
     sa.Column('bill_number', sa.String(36), nullable=False, index=True, unique=True),
     sa.Column('user_id', sa.ForeignKey('user.id'), index=True, nullable=False),
-    sa.Column('balance', sa.Float, nullable=False, default=0)
+    sa.Column('balance', sa.Float, nullable=False, default=0),
+    sa.Column('currency_id', sa.ForeignKey('currency.id'), index=True, nullable=False),
 )
 
 reason = sa.Table(
@@ -29,14 +38,6 @@ reason = sa.Table(
     sa.Column('code', sa.String(255), nullable=False, index=True, unique=True),
     sa.Column('name', sa.String(255), nullable=False),
     sa.Column('using_second_bill_number', sa.Boolean, nullable=False, server_default=expression.false()),
-)
-
-currency = sa.Table(
-    'currency',
-    metadata,
-    sa.Column('id', sa.BigInteger, primary_key=True, autoincrement=True),
-    sa.Column('alias', sa.String(255), nullable=False, index=True, unique=True),
-    sa.Column('name', sa.String(255), nullable=False)
 )
 
 operation = sa.Table(
@@ -50,4 +51,3 @@ operation = sa.Table(
     sa.Column('amount', sa.Float, nullable=False),
     sa.Column('opdate', sa.DateTime(timezone=True), nullable=False, index=True, server_default=func.now())
 )
-

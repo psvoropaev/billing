@@ -4,6 +4,7 @@ from pydantic import BaseModel
 class UserSchema(BaseModel):
     name: str
     pasport_data: str
+    currency_code: str = 'USD'
 
 
 class UserWalletSchema(UserSchema):
