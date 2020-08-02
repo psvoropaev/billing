@@ -28,10 +28,10 @@ async def add_users_view(user: UserSchema):
 @v1_router.post("/wallets/transfer")
 async def transfer_money_view(payment: TransferSchema, correlation_id=Depends(uuid4)):
     await payment_task.delay(correlation_id=str(correlation_id), reason_code="TRANSFER", **dict(payment))
-    return PlainTextResponse(status_code=204)
+    return PlainTextResponse(str(correlation_id), status_code=200)
 
 
 @v1_router.post("/wallets/accrual")
 async def transfer_money_view(payment: PaymentBaseSchema, correlation_id=Depends(uuid4)):
     await payment_task.delay(correlation_id=str(correlation_id), reason_code="ACCRUAL", **dict(payment))
-    return PlainTextResponse(status_code=204)
+    return PlainTextResponse(str(correlation_id), status_code=200)

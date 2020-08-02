@@ -1,5 +1,10 @@
 [dev-packages]
-pytest="*"
+ipython = "*"
+pytest = "*"
+pytest-env = "*"
+pytest-asyncio = "*"
+requests = "*"
+
 
 [packages]
 fastapi = "*"

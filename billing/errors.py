@@ -1,9 +1,9 @@
 class BaseException(Exception):
-    http_code = 500
+    http_code = 400
 
 
 class DuplicateUser(BaseException):
-    http_code = 400
+    pass
 
 
 class NotFound(BaseException):
@@ -11,8 +11,12 @@ class NotFound(BaseException):
 
 
 class OperationAlreadyExists(BaseException):
-    http_code = 400
+    pass
 
 
 class NotEnoughFunds(BaseException):
-    http_code = 400
+    pass
+
+
+class MaxRetryCount(BaseException):
+    http_code = 500

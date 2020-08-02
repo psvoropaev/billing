@@ -48,7 +48,7 @@ def transaction(f):
             tran = conn.transaction()
             try:
                 await tran.start()
-                result = await f(*args, connection=conn, **kwargs)
+                result = await f(*args, **dict(connection=conn, **kwargs))
                 await tran.commit()
                 return result
             except Exception as e:

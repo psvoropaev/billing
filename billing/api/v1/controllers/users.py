@@ -6,8 +6,8 @@ from billing.app.pg import dbpool, transaction
 from billing.api.v1.serializers import UserWalletSchema
 
 
-@dbpool
-async def get_users(db_pool):
+@transaction
+async def get_users(connection):
     users_query = select([
         models.user.c.name,
         models.user.c.pasport_data,
@@ -15,9 +15,8 @@ async def get_users(db_pool):
         models.wallet.c.balance
     ]).select_from(models.wallet.join(models.user))
 
-    async with db_pool.acquire() as conn:
-        users = await conn.fetch(users_query)
-        return [UserWalletSchema(**dict(user)) for user in users]
+    users = await connection.fetch(users_query)
+    return [UserWalletSchema(**dict(user)) for user in users]
 
 
 def add_user(name: str, pasport_data: str):
@@ -34,7 +33,6 @@ async def check_user_exist(pasport_data, connection) -> bool:
     return bool(row)
 
 
-@transaction
 async def create_user(name: str, pasport_data: str, connection):
     if not await check_user_exist(pasport_data, connection):
         user = await connection.fetchrow(add_user(name, pasport_data))

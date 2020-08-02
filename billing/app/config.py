@@ -15,9 +15,8 @@ class BaseConfig:
 
     CELERY_BROKER_URL: list
 
-    REDIS_HOST: str
-    REDIS_PORT: int
-    REDIS_DB: int
+    DELAY_ATTEMPTS: int
+    COUNT_ATTEMPTS: int
 
     DB_PG_NAME: str
     DB_SCHEMA: str
@@ -35,8 +34,6 @@ class BaseConfig:
             port=self.DB_PG_PORT,
             db_name=self.DB_PG_NAME,
         )
-
-
 
 
 class DevConfig(BaseConfig):

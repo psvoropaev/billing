@@ -7,10 +7,10 @@ COUNT_ATTEMPTS: 3
 CELERY_BROKER_URL:
   - amqp://user:password@rabbitmq:5672/billing
 
-DB_PG_HOST: postgres
+DB_PG_HOST: 0.0.0.0
 DB_PG_PORT: 5432
 DB_PG_USERNAME: billing_user
-DB_PG_NAME: billing_db
+DB_PG_NAME: billing_db_test
 DB_SCHEMA: public
 DB_PG_PASSWORD: 1q2w3e4rQW!
 
