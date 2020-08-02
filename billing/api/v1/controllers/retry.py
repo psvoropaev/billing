@@ -7,7 +7,6 @@ from sqlalchemy.exc import SQLAlchemyError
 from billing.app.config import config
 from billing.app.redis import cache_data_payments, del_cache_data_payments
 
-
 logger = logging.getLogger(config.APP_NAME)
 
 
@@ -33,6 +32,7 @@ def autoretry(
                     logger.exception(ex)
                 except Exception as ex:
                     logger.exception(ex)
+                    raise ex
             await del_cache_data_payments(correlation_id=correlation_id)
 
         return wrapper

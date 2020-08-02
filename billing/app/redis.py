@@ -1,10 +1,12 @@
 import json
+import  logging
 
 from aredis import StrictRedis
 
 from billing.app.config import config
 
 redis_client = StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB)
+logger = logging.getLogger(config.APP_NAME)
 
 
 async def cache_data_payments(*args, correlation_id, **kwargs):
@@ -27,4 +29,7 @@ async def run_errors_payments(async_handler):
         data = json.loads(await redis_client.get(correlation_id))
         args = data.get('args', [])
         kwargs = data.get('kwargs', {})
-        await async_handler(*args, correlation_id=correlation_id, **kwargs)
+        try:
+            await async_handler(*args, correlation_id=correlation_id, **kwargs)
+        except Exception as ex:
+            logger.exception(ex)
