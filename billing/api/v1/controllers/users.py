@@ -4,7 +4,6 @@ from billing import models, errors
 from billing.api.v1.controllers.wallets import add_wallet
 from billing.api.v1.controllers.currency import get_currency_id
 from billing.app.pg import transaction
-from billing.api.v1.serializers import UserWalletSchema
 
 
 @transaction
@@ -21,8 +20,7 @@ async def get_users(connection):
         models.wallet.c.balance
     ]).select_from(models.wallet.join(models.user))
 
-    users = await connection.fetch(users_query)
-    return [UserWalletSchema(**dict(user)) for user in users]
+    return await connection.fetch(users_query)
 
 
 def add_user(name: str, pasport_data: str):

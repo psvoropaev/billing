@@ -1,9 +1,8 @@
 import os
 
 from logging.config import dictConfig
-# from logstash_async.handler import AsynchronousLogstashHandler
 
-from billing.app import config
+from billing.app.config import config
 
 
 def create_logger():

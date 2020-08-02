@@ -2,7 +2,6 @@ import json
 
 from aredis import StrictRedis
 
-from billing.app import config
 from billing.app.config import config
 
 redis_client = StrictRedis(host=config.REDIS_HOST, port=config.REDIS_PORT, db=config.REDIS_DB)

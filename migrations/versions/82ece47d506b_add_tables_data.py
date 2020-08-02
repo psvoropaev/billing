@@ -32,7 +32,7 @@ def upgrade():
                 'using_second_bill_number': True
             },
             {
-                'code': 'ACCRUAL', 
+                'code': 'TOPUP',
                 'name': 'Зачисление денежных средств на кошелек клиента',
                 'using_second_bill_number': False
             }
