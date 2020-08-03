@@ -9,7 +9,7 @@ Billing
 curl --location --request GET '127.0.0.1:5000/v1/users' \
 --header 'Content-Type: application/json' '
 
-2.
+2. Создать пользователя и привязать кошелек в валюте
 curl --location --request POST '127.0.0.1:5000/v1/users' \
 --header 'Content-Type: application/json' \
 --data-raw '{
