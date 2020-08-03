@@ -24,7 +24,9 @@ def autoretry(
             for i, sleep_value in enumerate(delay_attempts):
                 try:
                     await cache_data_payments(*args, correlation_id=correlation_id, **kwargs)
-                    return await f(*args, str(correlation_id), **kwargs)
+                    result = await f(*args, str(correlation_id), **kwargs)
+                    await del_cache_data_payments(correlation_id=correlation_id)
+                    return result
                 except autoretry_for as ex:
                     if i == len(delay_attempts):
                         logger.error(f'Excess max retry count: {f.__name__}__{len(delay_attempts)}')
