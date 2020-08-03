@@ -32,6 +32,7 @@ def autoretry(
                     logger.exception(ex)
                 except Exception as ex:
                     logger.exception(ex)
+                    await del_cache_data_payments(correlation_id=correlation_id)
                     raise ex
             await del_cache_data_payments(correlation_id=correlation_id)
 

@@ -21,7 +21,6 @@ services:
       - "6379:6379"
     volumes:
       - ./docker/redis:/data
-    entrypoint: redis-server --appendonly yes
     restart: always
 
   billing_api:
